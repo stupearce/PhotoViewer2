@@ -39,7 +39,7 @@ def main():
     actions.append( (title, ('Welcome to SERGEY\npygame-based slideshow software',)) )
 
     for photo in photos:
-        actions.append((show,load(photo.path),4,photo.label))
+        actions.append( (show, (load(photo.path),4,photo.label)) )
 
 
         # now just show an image. in this case, it is best if you've re-sized
@@ -131,6 +131,18 @@ def get_photo_rotation(path):
                 rotation_degrees = 90
 
     return rotation_degrees
+
+def time_to_string(t):
+    # Convert to a tuple.
+    localtime = time.localtime(t)
+    # Convert to a nice string.
+    return time.strftime("%B %-d, %Y", localtime)
+
+# Filter image files 
+def is_image(pathname):
+    _, ext = os.path.splitext(pathname)
+    return ext.lower() in pvconfig.FILE_FORMATS
+
 
 if __name__ == "__main__":
     # Create a custom logger

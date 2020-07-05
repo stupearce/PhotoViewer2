@@ -16,16 +16,16 @@ class Photo(Base):
     rotation = Column(Integer)
     label = Column(String(250), nullable=False)
 #    pathname =Column(String(255))
-    pathname =""
-    def __init__(self, id, pathname, label, rotation, transition, duration):
+    path =""
+    def __init__(self, id, path, label, rotation, transition, duration):
         self.id = uuid.uuid4()
         self.label = label
         self.rotation = rotation
-        self.pathname = pathname
+        self.path = path
  
     def __str__(self):
         logging.info(inspect.getmembers(self))
-        return "id:'{0}' label:'{1}' rotation:'{2}' path:'{3}'".format(self.id,self.label,self.rotation,self.pathname)
+        return "id:'{0}' label:'{1}' rotation:'{2}' path:'{3}'".format(self.id,self.label,self.rotation,self.path)
 
 
 # Create an engine that stores data in the local directory's
