@@ -33,7 +33,7 @@ def main():
         # the music will loop if it gets to the end; you can start new music
         # any time.
 
-    actions.append( (music, ('/home/mike/sound/artists/nofx/punk-in-drublic--linoleum.mp3','NOFX\n"Linoleum"\nPunk In Drublic','/home/mike/sound/albums/nofx--punk-in-drublic/art.jpeg')) )
+    actions.append( (music, ('/home/pi/Music/01 - Dreadlock Holiday.mp3','music')) )
 
         # first, a title (white on a black background)
         # as you can see, newlines are handled. not much else "fancy", though
