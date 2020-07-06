@@ -25,6 +25,7 @@
 
 import sys
 import pdb
+import logging
 
 if __name__=='__main__':
     print("Do not run this; see README or DOCUMENTATION for usage instructions.")
@@ -248,7 +249,7 @@ def realzoom(image,delay0,delay1, xxx_todo_changeme,title,dir):
 
     title = rendertitle(title)
 
-    print("width,height:",width,height)
+    print(title," width,height:",width,height)
     if height > 768:
         if width < height:
             scaleratio = height/768.0
@@ -367,24 +368,24 @@ def show(image,delay,title=None):
     if int(delay) == 4:
         delay = 3
 
-    title = rendertitle(title)
+    titleImg = rendertitle(title)
 
     (width,height) = image.get_size()
 
-    print("width,height:",width,height)
+    log.debug("%s width,height:%d %d",title,width,height)
     if height > 768:
         if height > width:
             scaleratio = height/768.0
             newheight = 768
             newwidth = int(width / scaleratio)
-            print("scaling to",newwidth,newheight)
+            log.debug("scaling to %d,%d",newwidth,newheight)
 
         else:
             scaleratio = height/768.0
             scaleratio = width/1024.0
             newwidth = 1024
             newheight = int(height/scaleratio)
-            print("scaling to",newwidth,newheight)
+            log.debug("scaling to %d,%d",newwidth,newheight)
 
         scaled = pygame.transform.scale(image, (newwidth,newheight))
         scaled.set_colorkey()
@@ -396,8 +397,8 @@ def show(image,delay,title=None):
     x = (1024/2) - (newwidth/2)
     y = (768/2) - (newheight/2)
     options['screen'].blit(scaled, (x,y))
-    if title:
-        options['screen'].blit(title,(512 - title.get_size()[0]/2,768-title.get_size()[1]))
+    if titleImg:
+        options['screen'].blit(titleImg,(512 - titleImg.get_size()[0]/2,768-titleImg.get_size()[1]))
     pygame.display.flip()
     pygame.time.delay(int(delay*1000))
 
@@ -663,5 +664,8 @@ def slideshow(actions,wait=True):
     elapsed = (end-start)
     print("total running time: ",elapsed,"seconds")
     print("   minutes:", elapsed/60.0)
+
+log = logging.getLogger(__name__)
+log.setLevel(logging.DEBUG)
 
 

@@ -9,9 +9,11 @@
 
 from sergey import *
 import os
-import logging
+import pvlogger
 import pvconfig
 from PIL import Image
+from PIL.ExifTags import TAGS
+
 from photoviewer_model import Photo
 
 def main():
@@ -81,7 +83,6 @@ def main():
 
     actions.append( (title, ('the end',0,(128,128,128))) )
 
-
         # start the slideshow
     slideshow(actions)
 
@@ -93,7 +94,7 @@ def getPhotos(dir):
            
     for dirpath, dirnames, filenames in os.walk(dir):
         if filenames:
-            for filename in filenames:
+            for filename in sorted(filenames):
                 if is_image(filename):
                     pathname = os.path.join(dirpath, filename)
                     pathname = str(pathname)
@@ -102,7 +103,7 @@ def getPhotos(dir):
                     mtime = os.path.getmtime(pathname)
                     file_date = time_to_string(mtime)
                     transition = ''
-                    photolist.append(Photo(0,pathname,file_date,rotation,transition,5))
+                    photolist.append(Photo(0,pathname,filename,rotation,transition,5))
 
     log.debug("%d photo files found. " % (len(photolist)))
 
@@ -129,6 +130,8 @@ def get_photo_rotation(path):
                 rotation_degrees = -90
             elif rotation == 8:
                 rotation_degrees = 90
+            title = exif.get(0x010e,1)
+            log.debug("Image description %s",title)
 
     return rotation_degrees
 
@@ -146,5 +149,5 @@ def is_image(pathname):
 
 if __name__ == "__main__":
     # Create a custom logger
-    log = logging.getLogger(__name__)
+    log = pvlogger.logInit()
     main()
