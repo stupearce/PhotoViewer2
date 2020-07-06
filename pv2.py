@@ -19,7 +19,7 @@ from photoviewer_model import Photo
 def main():
     log.info('PV Started')
     photos = getPhotos(pvconfig.PHOTO_DIR)
-    sergey_init()
+    sergey_init(size=(1920,1080))
 
         # all the "stuff" to do is given as a list of "actions"
         # each action is a two-tuple: a function (probably imported from

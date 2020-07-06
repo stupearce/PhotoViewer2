@@ -142,23 +142,24 @@ def title(text,delay=3,color=(255,255,255)):
         lines = text.split('\n')
 
     options['screen'].fill((0,0,0))
-    
+    (sWidth,sHeight) = options['size']
+
     if not lines:
         surf = options['font'].render(text, True, color, (0,0,0))
         (w,h) = surf.get_size()
-        x = (1024/2) - (w/2)
-        y = (768/2) - (h/2)
+        x = (sWidth/2) - (w/2)
+        y = (sHeight/2) - (h/2)
         options['screen'].blit(surf, (x,y))
         pygame.display.update()
 
     else:
         # multiline
         yinc = options['font'].get_linesize() + 20
-        y = (768/2) - ((len(lines)*yinc)/2);
+        y = (sHeight/2) - ((len(lines)*yinc)/2);
         for line in lines:
             surf = options['font'].render(line, True, color, (0,0,0))
             (w,h) = surf.get_size()
-            x = (1024/2) - (w/2)
+            x = (sWidth/2) - (w/2)
             options['screen'].blit(surf, (x,y))
             y = y + yinc
             
@@ -176,12 +177,13 @@ def arttitle(text,pic):
         lines = text.split('\n')
 
     options['screen'].fill((0,0,0))
+    (sWidth,sHeight) = options['size']
 
     y = 50
     if not lines:
         surf = options['font'].render(text, True, color, (0,0,0))
         (w,h) = surf.get_size()
-        x = (1024/2) - (w/2)
+        x = (sWidth/2) - (w/2)
         options['screen'].blit(surf, (x,y))
         pygame.display.update()
 
@@ -191,7 +193,7 @@ def arttitle(text,pic):
         for line in lines:
             surf = options['font'].render(line, True, color, (0,0,0))
             (w,h) = surf.get_size()
-            x = (1024/2) - (w/2)
+            x = (sWidth/2) - (w/2)
             options['screen'].blit(surf, (x,y))
             y = y + yinc
             
@@ -199,7 +201,7 @@ def arttitle(text,pic):
 
     if None:
         (w,h) = surf.get_size()
-        x = (1024/2) - (w/2)
+        x = (sWidth/2) - (w/2)
         y = 70
         options['screen'].blit(surf, (x,y))
     image = pygame.transform.scale(pic, (300,300))
@@ -215,10 +217,11 @@ def credittitle(text,pic):
     global options
     lines = None
     options['screen'].fill((0,0,0))
-    
+    (sWidth,sHeight) = options['size']
+
     surf = options['font'].render(text, True, (255,255,255), (0,0,0))
     (w,h) = surf.get_size()
-    x = (1024/2) - (w/2)
+    x = (sWidth/2) - (w/2)
     y = 70
     options['screen'].blit(surf, (x,y))
     image = pygame.transform.scale(pic, (768,576))
@@ -362,6 +365,7 @@ def show(image,delay,title=None):
     global options
     if options['debug']:
         title = str(image)
+    (sWidth,sHeight) = options['size']
         
     image = ensurepic(image)
     if options['quick_burn']: delay=0.25
@@ -373,19 +377,18 @@ def show(image,delay,title=None):
     (width,height) = image.get_size()
 
     log.debug("%s width,height:%d %d",title,width,height)
-    if height > 768:
+    if height > sHeight:
         if height > width:
-            scaleratio = height/768.0
-            newheight = 768
+            scaleratio = height/sHeight
+            newheight = sHeight
             newwidth = int(width / scaleratio)
-            log.debug("scaling to %d,%d",newwidth,newheight)
+            log.debug("scaling by height to %d,%d",newwidth,newheight)
 
         else:
-            scaleratio = height/768.0
-            scaleratio = width/1024.0
-            newwidth = 1024
+            scaleratio = width/sWidth
+            newwidth = sWidth
             newheight = int(height/scaleratio)
-            log.debug("scaling to %d,%d",newwidth,newheight)
+            log.debug("scaling by width to %d,%d",newwidth,newheight)
 
         scaled = pygame.transform.scale(image, (newwidth,newheight))
         scaled.set_colorkey()
@@ -394,11 +397,11 @@ def show(image,delay,title=None):
         newwidth = width
         newheight = height
 
-    x = (1024/2) - (newwidth/2)
-    y = (768/2) - (newheight/2)
+    x = (sWidth/2) - (newwidth/2)
+    y = (sHeight/2) - (newheight/2)
     options['screen'].blit(scaled, (x,y))
     if titleImg:
-        options['screen'].blit(titleImg,(512 - titleImg.get_size()[0]/2,768-titleImg.get_size()[1]))
+        options['screen'].blit(titleImg,(sHeight/2 - titleImg.get_size()[0]/2,sWidth-titleImg.get_size()[1]))
     pygame.display.flip()
     pygame.time.delay(int(delay*1000))
 
@@ -523,12 +526,14 @@ def startmovie(fname, sndtrack,size=None):
         pygame.mixer.music.load(sndtrack)
 
     options['screen'].fill((0,0,0))
+    (sWidth,sHeight) = options['size']
+
     pygame.display.update()
     if size == None:
-        movie.set_display(screen, (0,0,1024,768))
+        movie.set_display(screen, (0,0,sWidth,sHeight))
     else:
         (w,h) = size
-        movie.set_display(screen, (512-int(w/2),0,w,h))
+        movie.set_display(screen, ((sWidth/2)-int(w/2),0,w,h))
     movie.play()
     if sndtrack:
         pygame.mixer.music.play()
