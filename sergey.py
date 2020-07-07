@@ -72,7 +72,7 @@ def sergey_init(size=False,
     if size:
         options['screen'] = pygame.display.set_mode(size)
     else:
-        options['screen'] = pygame.display.set_mode((0, 0),pygame.FULLSCREEN)
+        options['screen'] = pygame.display.set_mode((0, 0),pygame.HWSURFACE|pygame.FULLSCREEN)
         
     infoObject = pygame.display.Info()
     options['size'] = (infoObject.current_w, infoObject.current_h)
@@ -93,7 +93,9 @@ def sergey_init(size=False,
     else:
         options['cache_pics'] = False
 
-
+def sergy_shutdown():
+    log.info("Shutdown")
+    pygame.display.quit()
 
 
 def ensurepic(image):
@@ -112,7 +114,7 @@ def waitForKey(key=None):
 
 def music(sndtrack,t=None,art=None):
     global options
-    
+    log.debug("Queue Music %s",sndtrack)
     if not options['music']:
         print("ERROR: mixer not available")
         return
@@ -586,95 +588,99 @@ def load(path):
 
 
 def slideshow(actions,wait=True):
-    global options
-    if options['init'] == False:
-        print("WARNING: you didn't initialize SERGEY; using defaults")
-        sergey_init()
-        
-    if wait:
-        title(str.format("(press space) screen res {}",options['size']))
-        waitForKey()
-        pygame.mouse.set_visible(False)
-
-    start = time.time()
-    movie = None
-    paused = False
-    nextActionImmediately = True
-    autopilot = True
-    action = None
-    while 1:
-        evt = pygame.event.poll()
-
-        doaction = False
-        if evt.type == pygame.NOEVENT:
-            if nextActionImmediately is True or autopilot:
-                if not movie or not movie.get_busy():
-                    doaction = True
-                    nextActionImmediately = False
-
-            pygame.time.delay(25)
-
-        if evt.type == pygame.KEYUP:
-            if evt.key == 113:
-                print("QUIT!")
-                break
-            elif evt.key == 112:
-                if movie:
-                    if not paused:
-                        print("pausing movie")
-                        movie.pause()
-                        pygame.mixer.music.pause()
-                        paused = True
-                    else:
-                        print("resuming movie")
-                        movie.pause()
-                        pygame.mixer.music.unpause()
-                        paused = False
-
-            elif evt.key == 32 or evt.key == 110:
-                if movie and movie.get_busy():
-                    if evt.key == 32:
-                        print("  movie still playing; be patient")
-                        continue
-                    else:
-                        movie.stop()
-                        pygame.mixer.music.stop()
-                doaction = True
-
-        if doaction:
-            doaction = False
-
-                                            # try to use ref-counting, not
-                                            # the garbage-collector
-            if action:
-                (fn, args) = action
-                for foo in args:
-                    del foo
-                del args
-
-            if len(actions) == 0:
-                break;
-            action = actions[0]
-            if type(action) == type([]):
-                actions = action + actions[1:]
-                action = actions[0]
-            actions = actions[1:]
-            options['screen'].fill((0,0,0))
-            (fn,args) = action
+    try:
+        global options
+        if options['init'] == False:
+            print("WARNING: you didn't initialize SERGEY; using defaults")
+            sergey_init()
             
-            rtn = fn(*args)
-            if rtn:
-                movie = rtn
+        if wait:
+            title(str.format("(press space) screen res {}",options['size']))
+            waitForKey()
+            pygame.mouse.set_visible(False)
 
-    end = time.time()
+        start = time.time()
+        movie = None
+        paused = False
+        nextActionImmediately = True
+        autopilot = True
+        action = None
+        while 1:
+            evt = pygame.event.poll()
 
-    pygame.mouse.set_visible(True)
-    if wait:
-        waitForKey()
+            doaction = False
+            if evt.type == pygame.NOEVENT:
+                if nextActionImmediately is True or autopilot:
+                    if not movie or not movie.get_busy():
+                        doaction = True
+                        nextActionImmediately = False
 
-    elapsed = (end-start)
-    print("total running time: ",elapsed,"seconds")
-    print("   minutes:", elapsed/60.0)
+                pygame.time.delay(25)
+
+            if evt.type == pygame.KEYUP:
+                if evt.key == 113:
+                    print("QUIT!")
+                    break
+                elif evt.key == 112:
+                    if movie:
+                        if not paused:
+                            print("pausing movie")
+                            movie.pause()
+                            pygame.mixer.music.pause()
+                            paused = True
+                        else:
+                            print("resuming movie")
+                            movie.pause()
+                            pygame.mixer.music.unpause()
+                            paused = False
+
+                elif evt.key == 32 or evt.key == 110:
+                    if movie and movie.get_busy():
+                        if evt.key == 32:
+                            print("  movie still playing; be patient")
+                            continue
+                        else:
+                            movie.stop()
+                            pygame.mixer.music.stop()
+                    doaction = True
+
+            if doaction:
+                doaction = False
+
+                                                # try to use ref-counting, not
+                                                # the garbage-collector
+                if action:
+                    (fn, args) = action
+                    for foo in args:
+                        del foo
+                    del args
+
+                if len(actions) == 0:
+                    break;
+                action = actions[0]
+                if type(action) == type([]):
+                    actions = action + actions[1:]
+                    action = actions[0]
+                actions = actions[1:]
+                options['screen'].fill((0,0,0))
+                (fn,args) = action
+                
+                rtn = fn(*args)
+                if rtn:
+                    movie = rtn
+
+        end = time.time()
+
+        pygame.mouse.set_visible(True)
+        
+        if wait:
+            waitForKey()
+
+        elapsed = (end-start)
+        print("total running time: ",elapsed,"seconds")
+        print("   minutes:", elapsed/60.0)
+    finally:
+        sergy_shutdown()
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)

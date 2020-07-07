@@ -11,3 +11,5 @@ DATA_DIR = "/home/pi/Pictures"
 PROCESSED_ROOT_DIR = os.path.join(DATA_DIR, "processed_photos")
 
 FILE_FORMATS = [".jpg", ".jpeg"]
+
+MUSIC_FORMATS = [".mpg", ".mp3"]

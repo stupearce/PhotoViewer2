@@ -15,80 +15,107 @@ from PIL import Image
 from PIL.ExifTags import TAGS
 
 from photoviewer_model import Photo
+from photoviewer_model import Music
 
 def main():
     log.info('PV Started')
     photos = getPhotos(pvconfig.PHOTO_DIR)
+    tracks = getMusic(pvconfig.PHOTO_DIR)
     
     #window
     sergey_init(size=(1024,768))
-    #full screen
-    #sergey_init()
+    try:
+        #full screen
+        #sergey_init()
 
-        # all the "stuff" to do is given as a list of "actions"
-        # each action is a two-tuple: a function (probably imported from
-        # sergey) and then the tuple of args to that function
-    actions = []
+            # all the "stuff" to do is given as a list of "actions"
+            # each action is a two-tuple: a function (probably imported from
+            # sergey) and then the tuple of args to that function
+        actions = []
 
-        # first, start some music, with a title and the album-art FIXME:
-        # change paths to work with your system
-        # as you can see, it takes three args: the track, a title (with three
-        # lines in this case) and an optional album-art JPEG
-        # the music will loop if it gets to the end; you can start new music
-        # any time.
+            # first, start some music, with a title and the album-art FIXME:
+            # change paths to work with your system
+            # as you can see, it takes three args: the track, a title (with three
+            # lines in this case) and an optional album-art JPEG
+            # the music will loop if it gets to the end; you can start new music
+            # any time.
 
-    actions.append( (music, ('/home/pi/Music/01 - Dreadlock Holiday.mp3','music')) )
+        #actions.append( (music, ('/home/pi/Music/01 - Dreadlock Holiday.mp3','music')) )
 
-        # first, a title (white on a black background)
-        # as you can see, newlines are handled. not much else "fancy", though
+            # first, a title (white on a black background)
+            # as you can see, newlines are handled. not much else "fancy", though
 
-    actions.append( (title, ('Welcome to SERGEY\npygame-based slideshow software',)) )
+        actions.append( (title, ('Welcome to SERGEY\npygame-based slideshow software',)) )
 
-    for photo in photos:
-        actions.append( (show, (load(photo.path),4,photo.label)) )
+        for track in tracks:
+            actions.append( (music, (track.path,track.label)) )
+
+        for photo in photos:
+            actions.append( (show, (load(photo.path),4,photo.label)) )
 
 
-        # now just show an image. in this case, it is best if you've re-sized
-        # the image yourself so pygame doesn't have to do it "live", but
-        # whichever.
-        # args: the first is the image, the second is the delay (seconds) and
-        # the third is an optional caption to put over the bottom of the
-        # image. If the caption starts with ! then it is drawn black, not
-        # white
+            # now just show an image. in this case, it is best if you've re-sized
+            # the image yourself so pygame doesn't have to do it "live", but
+            # whichever.
+            # args: the first is the image, the second is the delay (seconds) and
+            # the third is an optional caption to put over the bottom of the
+            # image. If the caption starts with ! then it is drawn black, not
+            # white
 
-    #actions.append( (show, (load('aspy-valley-climb.jpeg'),4,'I am a Caption')) )
+        #actions.append( (show, (load('aspy-valley-climb.jpeg'),4,'I am a Caption')) )
 
-        # panning along a panoramic shot; you should resize your panorama so
-        # that the height is the same as the entire screen (default: 768) as
-        # this will make the zooming/panning faster (less to resize for
-        # pygame). It pre-calculates the images, so if you're getting silent
-        # patches in the music this is probably why.
-        #
-        # args the same as "show", except the caption doesn't currently work
+            # panning along a panoramic shot; you should resize your panorama so
+            # that the height is the same as the entire screen (default: 768) as
+            # this will make the zooming/panning faster (less to resize for
+            # pygame). It pre-calculates the images, so if you're getting silent
+            # patches in the music this is probably why.
+            #
+            # args the same as "show", except the caption doesn't currently work
 
-    #actions.append( (panzoom, (load('megamid-pano.jpeg'),4,'')) )
+        #actions.append( (panzoom, (load('megamid-pano.jpeg'),4,'')) )
 
-        # this zooms INTO a portion of a picture. for these, it is usually
-        # best to leave the image at full resolution so it looks good when you
-        # get all the way in.
+            # this zooms INTO a portion of a picture. for these, it is usually
+            # best to leave the image at full resolution so it looks good when you
+            # get all the way in.
 
-        # args: image, delay at full-picture, delay at zoomed portion, portion
-        # to zoom to (x, y, width) and an optional caption
+            # args: image, delay at full-picture, delay at zoomed portion, portion
+            # to zoom to (x, y, width) and an optional caption
 
-    #actions.append( (zoomin, (load('aspy-valley-climb.jpeg'),5,4,(1700,1300,600),'')) )
+        #actions.append( (zoomin, (load('aspy-valley-climb.jpeg'),5,4,(1700,1300,600),'')) )
 
-        # this zooms out from a picture (the exact opposite of the above). The
-        # arguments are the same
+            # this zooms out from a picture (the exact opposite of the above). The
+            # arguments are the same
 
-    #actions.append( (zoomout, (load('chinamans-ne-ridge-corner.jpeg'),3,2,(1600,900,500),'')) )
+        #actions.append( (zoomout, (load('chinamans-ne-ridge-corner.jpeg'),3,2,(1600,900,500),'')) )
 
-        # more args to "title": the delay and a colour (an RGB triple between
-        # 0,255 for each, so this is medium-grey)
+            # more args to "title": the delay and a colour (an RGB triple between
+            # 0,255 for each, so this is medium-grey)
 
-    actions.append( (title, ('the end',0,(128,128,128))) )
+        actions.append( (title, ('the end',0,(128,128,128))) )
 
-        # start the slideshow
-    slideshow(actions)
+            # start the slideshow
+        slideshow(actions)
+    finally:
+        sergy_shutdown()
+    
+    
+# Get a list of photos to display
+def getMusic(dir):
+    musiclist = list()
+
+    log.info("Scan music at %s" % dir)
+           
+    for dirpath, dirnames, filenames in os.walk(dir):
+        if filenames:
+            for filename in sorted(filenames):
+                if is_music(filename):
+                    pathname = os.path.join(dirpath, filename)
+                    pathname = str(pathname)
+                    musiclist.append(Music(pathname,filename))
+
+    log.debug("%d music files found. " % (len(musiclist)))
+
+    return musiclist
 
 # Get a list of photos to display
 def getPhotos(dir):
@@ -149,6 +176,11 @@ def time_to_string(t):
 def is_image(pathname):
     _, ext = os.path.splitext(pathname)
     return ext.lower() in pvconfig.FILE_FORMATS
+
+# Filter music files 
+def is_music(pathname):
+    _, ext = os.path.splitext(pathname)
+    return ext.lower() in pvconfig.MUSIC_FORMATS
 
 
 if __name__ == "__main__":

@@ -27,6 +27,17 @@ class Photo(Base):
         logging.info(inspect.getmembers(self))
         return "id:'{0}' label:'{1}' rotation:'{2}' path:'{3}'".format(self.id,self.label,self.rotation,self.path)
 
+class Music():
+    label = ""
+    path = ""
+    def __init__(self, path, label):
+        self.id = uuid.uuid4()
+        self.label = label
+        self.path = path
+ 
+    def __str__(self):
+        logging.info(inspect.getmembers(self))
+        return "id:'{0}' label:'{1}' path:'{3}'".format(self.id,self.label,self.path)
 
 # Create an engine that stores data in the local directory's
 # sqlalchemy_example.db file.
