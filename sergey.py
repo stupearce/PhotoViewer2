@@ -55,7 +55,7 @@ options = {}
 options['init'] = False
 DEFAULT_DELAY = 4
 
-def sergey_init(size=(1024,768),
+def sergey_init(size=False,
                 fontfile='/usr/share/fonts/truetype/ttf-dejavu/DejaVuSans-Bold.ttf',
                 cache=False):
     
@@ -69,8 +69,14 @@ def sergey_init(size=(1024,768),
     except:
         options['music'] = False
     pygame.font.init()
-
-    options['screen'] = pygame.display.set_mode(size)
+    if size:
+        options['screen'] = pygame.display.set_mode(size)
+    else:
+        options['screen'] = pygame.display.set_mode((0, 0),pygame.FULLSCREEN)
+        
+    infoObject = pygame.display.Info()
+    options['size'] = (infoObject.current_w, infoObject.current_h)
+        
     try:
         options['font'] = pygame.font.SysFont("helvetica",12)
     except IOError:
@@ -80,7 +86,6 @@ def sergey_init(size=(1024,768),
         print()
         raise
     options['quick_burn'] = False
-    options['size'] = size
     options['debug'] = False
     options['init'] = True
     if cache:
@@ -372,9 +377,9 @@ def show(image,delay,title=None):
     if int(delay) == 4:
         delay = 3
 
-    titleImg = rendertitle(title)
-
     (width,height) = image.get_size()
+
+    titleImg = rendertitle("{} {}x{}".format(title,width,height))
 
     log.debug("%s width,height:%d %d",title,width,height)
     if height > sHeight:
@@ -401,9 +406,10 @@ def show(image,delay,title=None):
     y = (sHeight/2) - (newheight/2)
     options['screen'].blit(scaled, (x,y))
     if titleImg:
-        options['screen'].blit(titleImg,(sHeight/2 - titleImg.get_size()[0]/2,sWidth-titleImg.get_size()[1]))
+        options['screen'].blit(titleImg,((sWidth/2) - titleImg.get_size()[0]/2,sHeight-titleImg.get_size()[1]))
+
     pygame.display.flip()
-    pygame.time.delay(int(delay*1000))
+    pygame.time.wait(int(delay*1000))
 
 def panzoom(image,delay,author=None):
     image = ensurepic(image)
@@ -586,7 +592,7 @@ def slideshow(actions,wait=True):
         sergey_init()
         
     if wait:
-        title('(press space)')
+        title(str.format("(press space) screen res {}",options['size']))
         waitForKey()
         pygame.mouse.set_visible(False)
 
