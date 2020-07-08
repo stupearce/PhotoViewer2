@@ -51,8 +51,8 @@ def main():
             actions.append( (music, (track.path,track.label)) )
 
         for photo in photos:
-            actions.append( (show, (load(photo.path),4,photo.label)) )
-
+            actions.append( (fade, (load(photo.path),4,photo.label)) )
+            #actions.append( (zoomin, (load(photo.path),5,4,(1700,1300,600),'')) )
 
             # now just show an image. in this case, it is best if you've re-sized
             # the image yourself so pygame doesn't have to do it "live", but

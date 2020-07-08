@@ -50,6 +50,7 @@ import pygame
 import time
 import sys
 import types
+import transitions
 
 options = {}
 options['init'] = False
@@ -70,13 +71,16 @@ def sergey_init(size=False,
         options['music'] = False
     pygame.font.init()
     if size:
-        options['screen'] = pygame.display.set_mode(size)
+        screen = pygame.display.set_mode(size)
     else:
-        options['screen'] = pygame.display.set_mode((0, 0),pygame.HWSURFACE|pygame.FULLSCREEN)
-        
+        screen = pygame.display.set_mode((0, 0),pygame.HWSURFACE|pygame.FULLSCREEN)
+    
+    options['screen'] = screen
+    
     infoObject = pygame.display.Info()
     options['size'] = (infoObject.current_w, infoObject.current_h)
-        
+    
+    transitions.init(screen,infoObject.current_w, infoObject.current_h)    
     try:
         options['font'] = pygame.font.SysFont("helvetica",12)
     except IOError:
@@ -100,7 +104,7 @@ def sergy_shutdown():
 
 def ensurepic(image):
     if not (type(image) is bytes):
-        return pygame.image.load(image)
+        return pygame.image.load(image).convert()
     return image
 
 def waitForKey(key=None):
@@ -256,20 +260,21 @@ def realzoom(image,delay0,delay1, xxx_todo_changeme,title,dir):
     if options['quick_burn']: delay=0.25
 
     (width,height) = image.get_size()
+    (sWidth,sHeight) = options['size']
 
     title = rendertitle(title)
 
     print(title," width,height:",width,height)
-    if height > 768:
+    if height > sHeight:
         if width < height:
-            scaleratio = height/768.0
-            newheight = 768
+            scaleratio = height/sHeight
+            newheight = sHeight
             newwidth = int(width / scaleratio)
             #print "scaling to",newwidth,newheight
 
         else:
-            scaleratio = width/1024.0
-            newwidth = 1024
+            scaleratio = width/sWidth
+            newwidth = sWidth
             newheight = int(height/scaleratio)
             print("scaling to",newwidth,newheight)
 
@@ -292,9 +297,9 @@ def realzoom(image,delay0,delay1, xxx_todo_changeme,title,dir):
     
     if dir == 'in':
         options['screen'].fill((0,0,0))
-        options['screen'].blit(scaled, ((1024-scaled.get_size()[0])/2,0))
+        options['screen'].blit(scaled, ((sWidth-scaled.get_size()[0])/2,0))
         if title:
-            options['screen'].blit(title,(512 - title.get_size()[0]/2,768-title.get_size()[1]))
+            options['screen'].blit(title,((sWidth/2) - title.get_size()[0]/2,sHeight-title.get_size()[1]))
         pygame.display.flip()
 
     ## make zoomed images
@@ -305,7 +310,7 @@ def realzoom(image,delay0,delay1, xxx_todo_changeme,title,dir):
     stepheight = (r[3] - yrange) / (float(steps))
     stepx = (x) / (float(steps))
     stepy = (y) / (float(steps))
-    w = 1024
+    w = sWidth
     h = int(w * ratio)
     zooms = []
     thex = x
@@ -314,7 +319,7 @@ def realzoom(image,delay0,delay1, xxx_todo_changeme,title,dir):
     for foo in range(steps+1):
         zoom = image.subsurface( (int(thex), int(they), int(xrange), int(yrange)) )
         zoom = pygame.transform.scale(zoom, (w,h))
-        zooms.append( (zoom,384-(h/2),w) )
+        zooms.append( (zoom,(sHeight/2)-(h/2),w) )
         thex = thex - stepx
         they = they - stepy
         xrange = xrange + stepwidth
@@ -323,15 +328,15 @@ def realzoom(image,delay0,delay1, xxx_todo_changeme,title,dir):
         if not shown:
             shown = True
             if dir == 'out':
-                options['screen'].blit(zoom, (0,384-(h/2)))
+                options['screen'].blit(zoom, (0,(sheight/2)-(h/2)))
                 if title:
-                    options['screen'].blit(title,(512 - title.get_size()[0]/2,768-title.get_size()[1]))
+                    options['screen'].blit(title,((sWidth/2) - title.get_size()[0]/2,sHeight-title.get_size()[1]))
                 pygame.display.flip()
             else:
                 if 0:
                     options['screen'].blit(scaled, (0,0))
                     if title:
-                        options['screen'].blit(title,(512 - title.get_size()[0]/2,768-title.get_size()[1]))
+                        options['screen'].blit(title,((sWidth/2) - title.get_size()[0]/2,sHeight-title.get_size()[1]))
                     pygame.display.flip()
 
     if dir == 'in':
@@ -346,7 +351,7 @@ def realzoom(image,delay0,delay1, xxx_todo_changeme,title,dir):
     for (zoom,y,mywidth) in zooms:
         options['screen'].blit(zoom, (0,y))
         if title:
-            options['screen'].blit(title,(512 - title.get_size()[0]/2,768-title.get_size()[1]))
+            options['screen'].blit(title,((sWidth/2) - title.get_size()[0]/2,sHeight-title.get_size()[1]))
         pygame.display.flip()
         evt = pygame.event.poll()
         if evt.type == pygame.KEYUP and evt.key == 32:
@@ -354,9 +359,9 @@ def realzoom(image,delay0,delay1, xxx_todo_changeme,title,dir):
 
     if 0:#dir == 'out':
         options['screen'].fill((0,0,0))
-        options['screen'].blit(scaled, ((1024-scaled.get_size()[0])/2,0))
+        options['screen'].blit(scaled, ((sWidth-scaled.get_size()[0])/2,0))
         if title:
-            options['screen'].blit(title,(512 - title.get_size()[0]/2,768-title.get_size()[1]))
+            options['screen'].blit(title,((sWidth/2) - title.get_size()[0]/2,sHeight-title.get_size()[1]))
         pygame.display.flip()
         
     pygame.time.delay(int((delay1*1000)/2))
@@ -524,7 +529,57 @@ def panzoom(image,delay,author=None):
         pygame.display.flip()
         pygame.time.delay(int(delay*1000))
     
+def fade(image,delay,title=None):
+    image = ensurepic(image)
+    global options
+    (width,height) = image.get_size()
+
+    (sWidth,sHeight) = options['size']
+
+    (width,height) = image.get_size()
+
+    titleImg = rendertitle("{} {}x{}".format(title,width,height))
+
+    log.debug("%s width,height:%d %d",title,width,height)
+    if height > sHeight:
+        if height > width:
+            scaleratio = height/sHeight
+            newheight = sHeight
+            newwidth = int(width / scaleratio)
+            log.debug("scaling by height to %d,%d",newwidth,newheight)
+
+        else:
+            scaleratio = width/sWidth
+            newwidth = sWidth
+            newheight = int(height/scaleratio)
+            log.debug("scaling by width to %d,%d",newwidth,newheight)
+
+        scaled = pygame.transform.scale(image, (newwidth,newheight))
+        scaled.set_colorkey()
+    else:
+        scaled = image
+        newwidth = width
+        newheight = height
+
+    x = (sWidth/2) - (newwidth/2)
+    y = (sHeight/2) - (newheight/2)
     
+    newImage = pygame.Surface((sWidth,sHeight))
+    newImage.blit(scaled, (x,y))
+    
+    if titleImg:
+        newImage.blit(titleImg,((sWidth/2) - titleImg.get_size()[0]/2,sHeight-titleImg.get_size()[1]))
+                        
+    clock = pygame.time.Clock()
+    transitions.run(newImage,'fade')
+    print("tx start")    
+       
+    while transitions.updateScreen() != False:
+        pygame.display.flip()
+
+        clock.tick(50)
+            
+    print("tx fin")    
     
 def startmovie(fname, sndtrack,size=None):
     global options
@@ -582,7 +637,7 @@ def load(path):
     if not options['cache_pics']:
         return path
     title('loading...\n%s'%path,0,(100,100,100))
-    return pygame.image.load(path)
+    return pygame.image.load(path).convert()
     
 
 
@@ -662,7 +717,6 @@ def slideshow(actions,wait=True):
                     actions = action + actions[1:]
                     action = actions[0]
                 actions = actions[1:]
-                options['screen'].fill((0,0,0))
                 (fn,args) = action
                 
                 rtn = fn(*args)
