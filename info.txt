@@ -1,0 +1,33 @@
+On Macos (refs https://opensource.com/article/20/4/pyenv)
+using vscode https://code.visualstudio.com/docs/python/python-tutorial#_prerequisites
+
+install Homebrew (not simple)
+brew install Pyenv :Installs a python version manager - but still a global set of versions that you can switch between)
+pyenv versions :lists available versions
+pyenv install 3.8.0 :Installs a new isoloated version of python 
+pyenv global 3.8.0 (sets the global version) 
+python -V (check that it worked)
+
+pyenv local 3.5.9 :sets the version for this directory pyenv(you could set the version for a specific directory - but the packages are still global to this master version)
+pyenv version ;displays the currently selected version
+pyenv which :shows path to the current python exe
+
+pip installs python shit - packages to the current python version library unless you use a virtua env:
+
+virtual environments 
+refs:
+https://opensource.com/article/19/6/python-virtual-environments-mac)
+https://packaging.python.org/tutorials/pipinstalling-packages/#id16
+
+use 
+venv (part of python 3.3+) 
+ref: https://docs.python.org/3/library/venv.html?highlight=virtual%20env#creating-virtual-environments
+or 
+virtualenv (pip install viretualenv)
+ref: https://virtualenv.pypa.io/en/latest/user_guide.html
+
+but Pipenv behaves a bit like npm and sorts it all
+brew install pipenv
+ref https://pipenv.pypa.io/en/latest/
+pipenv --where
+pipenv --venv
