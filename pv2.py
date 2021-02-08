@@ -45,14 +45,13 @@ def main():
             # first, a title (white on a black background)
             # as you can see, newlines are handled. not much else "fancy", though
 
-        actions.append( (title, ('Welcome to SERGEY\npygame-based slideshow software',)) )
+        actions.append( (title, ('Welcome to Picture Viewer',)) )
 
         for track in tracks:
             actions.append( (music, (track.path,track.label)) )
 
         for photo in photos:
             actions.append( (fade, (load(photo.path),4,photo.label)) )
-            #actions.append( (zoomin, (load(photo.path),5,4,(1700,1300,600),'')) )
 
             # now just show an image. in this case, it is best if you've re-sized
             # the image yourself so pygame doesn't have to do it "live", but
@@ -99,7 +98,7 @@ def main():
         sergy_shutdown()
     
     
-# Get a list of photos to display
+# Get a list of music to play
 def getMusic(dir):
     musiclist = list()
 
@@ -139,6 +138,7 @@ def getPhotos(dir):
     log.debug("%d photo files found. " % (len(photolist)))
 
     return photolist
+
 # Get the Photos rotation
 def get_photo_rotation(path):
     rotation_degrees = None

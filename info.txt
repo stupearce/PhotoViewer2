@@ -31,3 +31,26 @@ brew install pipenv
 ref https://pipenv.pypa.io/en/latest/
 pipenv --where
 pipenv --venv
+
+List installed modules
+pipenv graph
+
+Run PV2pip3
+pipenv run python pv2.py 
+
+To build a requirements.txt file (for various distro tools)
+pipenv lock -r > requirements.txt
+
+check if any package needs an update (dry run)
+pipenv update --outdated
+
+to bulid distro use
+https://docs.python-guide.org/shipping/freezing/#freezing-your-code-ref
+pyInstaller
+https://www.pyinstaller.org/
+
+cx_Freeze
+https://pypi.org/project/cx-Freeze/
+https://cx-freeze.readthedocs.io/en/latest/overview.html
+
+

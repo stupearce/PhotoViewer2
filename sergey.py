@@ -32,15 +32,15 @@ if __name__=='__main__':
     sys.exit(-1)
     
 
-print('''
-sergey
-Copyright (C) 2007 Mike Warren <mike@mike-warren.com>
+# print('''
+# sergey
+# Copyright (C) 2007 Mike Warren <mike@mike-warren.com>
 
-This program comes with ABSOLUTELY NO WARRANTY; for details see
-http://mike-warren.com/sergey or the source code. This is free
-software, and you are welcome to redistribute it under certain
-conditions; see the source code for details.
-''')
+# This program comes with ABSOLUTELY NO WARRANTY; for details see
+# http://mike-warren.com/sergey or the source code. This is free
+# software, and you are welcome to redistribute it under certain
+# conditions; see the source code for details.
+# ''')
 
 
 
@@ -605,10 +605,6 @@ def startmovie(fname, sndtrack,size=None):
         raise "No video in movie " + str(fname)
     return movie
 
-
-
-
-
 def makeimages(dir,delay=DEFAULT_DELAY):
     rtn = []
     directory = os.listdir(dir)
@@ -650,7 +646,7 @@ def slideshow(actions,wait=True):
             sergey_init()
             
         if wait:
-            title(str.format("(press space) screen res {}",options['size']))
+            title(str.format("(press space to start) screen res {}",options['size']))
             waitForKey()
             pygame.mouse.set_visible(False)
 
