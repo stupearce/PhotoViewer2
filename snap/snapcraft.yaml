@@ -12,7 +12,7 @@ grade: devel # must be 'stable' to release into candidate/stable channels
 confinement: devmode # use 'strict' once you have the right plugs and slots
 
 parts:
-  python3:
+  photoviewer:
     source: .
     plugin: python
     requirements:
@@ -20,4 +20,7 @@ parts:
 
 apps:
   photoviewer:
-    command: pv2
+    command: photoviewer
+
+architectures:
+  - build-on: [amd64, arm64]

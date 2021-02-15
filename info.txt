@@ -1,8 +1,16 @@
 On Macos (refs https://opensource.com/article/20/4/pyenv)
 using vscode https://code.visualstudio.com/docs/python/python-tutorial#_prerequisites
 
+****************************************************************
+Setup Mac for Python:
+
+Prereqs HomeBrew:
 install Homebrew (not simple)
-brew install Pyenv :Installs a python version manager - but still a global set of versions that you can switch between)
+
+******************************
+option 1:
+Pyenv (a python version manager)
+`brew install Pyenv` :Install, Manages a global set of python versions that you can switch between)
 pyenv versions :lists available versions
 pyenv install 3.8.0 :Installs a new isoloated version of python 
 pyenv global 3.8.0 (sets the global version) 
@@ -12,7 +20,8 @@ pyenv local 3.5.9 :sets the version for this directory pyenv(you could set the v
 pyenv version ;displays the currently selected version
 pyenv which :shows path to the current python exe
 
-pip installs python shit - packages to the current python version library unless you use a virtua env:
+Python package manager:
+pip /pip3 installs python shit - packages to the current python version library unless you use a virtual env:
 
 virtual environments 
 refs:
@@ -26,16 +35,30 @@ or
 virtualenv (pip install viretualenv)
 ref: https://virtualenv.pypa.io/en/latest/user_guide.html
 
-but Pipenv behaves a bit like npm and sorts it all
+
+note to pull all the modules to start developing one can:
+pip install -r requirements.txt
+reqs.txt is abit like the npm packages.json - but really its just an install list
+to build the reqs file use:
+pip freeze > requirements.txt
+
+**************************************************************
+Option 2 PipEnv: a much better way
+**************************************************************
+`Pipenv` behaves a bit like npm and sorts it all outdate
+it produces
+Pipfile and Pipfile.lock (rather like packages.json)
+
 brew install pipenv
 ref https://pipenv.pypa.io/en/latest/
+
 pipenv --where
 pipenv --venv
 
 List installed modules
 pipenv graph
 
-Run PV2pip3
+Run the project
 pipenv run python pv2.py 
 
 To build a requirements.txt file (for various distro tools)
@@ -44,7 +67,10 @@ pipenv lock -r > requirements.txt
 check if any package needs an update (dry run)
 pipenv update --outdated
 
-to bulid distro use
+***************************************************************
+Package it up: to bulid manual distro
+https://packaging.python.org/tutorials/packaging-projects/
+
 https://docs.python-guide.org/shipping/freezing/#freezing-your-code-ref
 pyInstaller
 https://www.pyinstaller.org/
@@ -52,5 +78,77 @@ https://www.pyinstaller.org/
 cx_Freeze
 https://pypi.org/project/cx-Freeze/
 https://cx-freeze.readthedocs.io/en/latest/overview.html
+
+****************************************************************
+Package it up: a much better way Snapcraft
+****************************************************************
+Client facing (consuming):
+snapd - the clent side stuff installed by default on many Ubuntu dists (but not pi)
+https://snapcraft.io/docs/getting-started
+
+Developer side (publishing):
+****************************************************************************************
+https://snapcraft.io/docs/snapcraft-overview
+
+creating the yaml:
+python specific: 
+https://snapcraft.io/docs/python-plugin
+https://snapcraft.io/docs/python-apps
+https://github.com/WillNilges/yap3st
+
+
+Building a snap locally
+-----------------------
+Inside a project folder with a valid snapcraft.yaml file describing the project elements
+snapcraft --debug
+launches a multipass vm to do the build
+
+if it fails jump in to the vm and then you can use python stuff
+
+
+Github remote build ?
+---------------------
+https://snapcraft.io/blog/we-are-changing-the-way-you-build-snaps-from-github-repos
+
+
+Testing a snap (inside a multipass vm - see below to create a clean vm)
+*******************************
+sudo snap install my-snap-name_0.1_amd64.snap --dangerous --devmode
+
+to remove it
+sudo snap remove photo-viewer
+
+***********to read* about pi*********
+https://snapcraft.io/docs/gadget-snap
+https://github.com/snapcore/pi-gadget
+https://snapcraft.io/docs/installing-snap-on-raspbian
+*************************************
+
+list contents of a snap:
+unsquashfs -l *.snap
+
+Clean the build env:
+snapcraft clean
+
+********************************************************************************************
+Multipass is a Linux VM
+https://www.techrepublic.com/article/multipass-is-a-new-tool-for-launching-virtual-machines/
+
+List the available vm types:
+multipass list - lists the vms available and state
+
+Launch an instance of one of the types:
+multipass launch 'snapcraft:core18'
+you get an abstract vm name e.g. 'pragmatic-tapir'
+
+Mount a local directory inside the vm:
+https://www.techrepublic.com/article/how-to-share-data-between-host-and-vm-with-multipass/
+multipass mount ~/code pragmatic-tapir
+
+get info on a mounted vm:
+multipass info pragmatic-tapir
+
+log in to the instance:
+multipass shell pragmatic-tapir
 
 

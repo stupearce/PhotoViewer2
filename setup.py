@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
-from distutils.core import setup
+from setuptools import setup, find_packages
+
 setup(name='photoviewer',
       version='0.1',
       license='GPL 3.0',
@@ -10,11 +11,24 @@ setup(name='photoviewer',
       author='Slippy',
       author_email='sidsnake@hotmail.co.uk',
       url='http://www.foo.co.uk',
-      
-      py_modules=['pv2'],
-     #ß scripts=['','']
-      entry_points='''
-          [console_scripts]
-          pv2=pv2:main
-      '''
+
+      packages=find_packages(include=['photoviewer', 'photoviewer.*','sergey','sergy.*']),
+
+      install_requires=[
+            'pillow==8.0.1',
+            'pygame==2.0.0',
+            'requests==2.25.1',
+            'sqlalchemy==1.3.22',
+      ],
+
+      entry_points={
+            'console_scripts': ['photoviewer=photoviever.pv2:main']
+      },
+      classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
+        "Operating System :: OS Independent",
+      ],
+      python_requires='>=3.6',
+
       )
