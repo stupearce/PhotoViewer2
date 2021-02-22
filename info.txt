@@ -90,8 +90,12 @@ Developer side (publishing):
 ****************************************************************************************
 https://snapcraft.io/docs/snapcraft-overview
 
-creating the yaml:
-python specific: 
+#1 First the python project must have a working setuptools build (setup.py) that works
+This is what would be used to package for PyPi distro. 
+Snapcraft uses this to get the source files (aparently)
+
+#2 Creating the snapcraft.yaml:
+Python specific: 
 https://snapcraft.io/docs/python-plugin
 https://snapcraft.io/docs/python-apps
 https://github.com/WillNilges/yap3st
@@ -104,7 +108,6 @@ snapcraft --debug
 launches a multipass vm to do the build
 
 if it fails jump in to the vm and then you can use python stuff
-
 
 Github remote build ?
 ---------------------

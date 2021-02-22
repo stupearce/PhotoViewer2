@@ -12,7 +12,10 @@ setup(name='photoviewer',
       author_email='sidsnake@hotmail.co.uk',
       url='http://www.foo.co.uk',
 
-      packages=find_packages(include=['photoviewer', 'photoviewer.*','sergey','sergy.*']),
+      packages=find_packages(
+            ),
+      # package_dir = {"":"src"},
+      # py_modules=["six"],
 
       install_requires=[
             'pillow==8.0.1',
@@ -20,10 +23,12 @@ setup(name='photoviewer',
             'requests==2.25.1',
             'sqlalchemy==1.3.22',
       ],
+      
+      scripts = ['bin/photoviewer'],
 
-      entry_points={
-            'console_scripts': ['photoviewer=photoviever.pv2:main']
-      },
+      # entry_points={
+      #       'console_scripts': ['photoviewer=photoviewer.photoviewer:main']
+      # },
       classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

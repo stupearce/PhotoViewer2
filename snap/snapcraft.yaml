@@ -15,12 +15,13 @@ parts:
   photoviewer:
     source: .
     plugin: python
+    python-version: 'python3'
     requirements:
       - requirements.txt
 
 apps:
   photoviewer:
-    command: photoviewer
+    command: bin/photoviewer
 
 architectures:
   - build-on: [amd64, arm64]

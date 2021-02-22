@@ -1,20 +1,20 @@
 import os
 import sys
 import uuid
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import relationship
-from sqlalchemy import create_engine
+# from sqlalchemy import Column, ForeignKey, Integer, String
+# from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.orm import relationship
+# from sqlalchemy import create_engine
 import inspect
 import logging
  
-Base = declarative_base()
+# Base = declarative_base()
  
-class Photo(Base):
-    __tablename__ = 'photo'
-    id = Column(Integer, primary_key=True)
-    rotation = Column(Integer)
-    label = Column(String(250), nullable=False)
+class Photo():
+    # __tablename__ = 'photo'
+    # id = Column(Integer, primary_key=True)
+    # rotation = Column(Integer)
+    # label = Column(String(250), nullable=False)
 #    pathname =Column(String(255))
     path =""
     def __init__(self, id, path, label, rotation, transition, duration):
@@ -41,8 +41,8 @@ class Music():
 
 # Create an engine that stores data in the local directory's
 # sqlalchemy_example.db file.
-engine = create_engine('sqlite:///pv.db')
+# engine = create_engine('sqlite:///pv.db')
  
 # Create all tables in the engine. This is equivalent to "Create Table"
 # statements in raw SQL.
-Base.metadata.create_all(engine)
+# Base.metadata.create_all(engine)
