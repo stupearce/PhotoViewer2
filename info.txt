@@ -154,4 +154,17 @@ multipass info pragmatic-tapir
 log in to the instance:
 multipass shell pragmatic-tapir
 
+********************************************
+Raspberry Pi (def user pi pass raspberry)
+
+sudo install xrdp (microsoft remote desktop )
+https://pimylifeup.com/raspberry-pi-remote-desktop/
+
+install snapd for snapcraft
+sudo apt update (just updates the apt catalogue)
+sudo apt install snapd
+sudo reboot
+sudo snap install core
+
+https://snapcraft.io/docs/installing-snap-on-raspbian
 
