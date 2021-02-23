@@ -24,4 +24,4 @@ apps:
     command: bin/photoviewer
 
 architectures:
-  - build-on: [amd64, armhf]
+  - build-on: [armhf]

@@ -89,6 +89,7 @@ https://snapcraft.io/docs/getting-started
 Developer side (publishing):
 ****************************************************************************************
 https://snapcraft.io/docs/snapcraft-overview
+https://snapcraft.io/blog/want-to-publish-a-snap-heres-a-list-of-dos-and-donts
 
 #1 First the python project must have a working setuptools build (setup.py) that works
 This is what would be used to package for PyPi distro. 
