@@ -49,11 +49,14 @@ Option 2 PipEnv: a much better way
 it produces
 Pipfile and Pipfile.lock (rather like packages.json)
 
-brew install pipenv
+brew install pipenv (or pip3 install pipenv - raspberry)
 ref https://pipenv.pypa.io/en/latest/
 
-pipenv --where
-pipenv --venv
+Clone the repo and then: `pipenv install`
+pipenv shell (launch into the venv) : exit - leave the shell
+
+pipenv --where ( ??)
+pipenv --venv (location of the venv)
 
 List installed modules
 pipenv graph
@@ -169,3 +172,7 @@ sudo snap install core
 
 https://snapcraft.io/docs/installing-snap-on-raspbian
 
+snap login (developer account as the snaps are private)
+stuart@blu-oak
+pass samtd
+sudo snap install --edge photo-viewer

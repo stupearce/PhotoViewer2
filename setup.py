@@ -19,7 +19,7 @@ setup(name='photoviewer',
 
       install_requires=[
             'pillow==8.0.1',
-            'pygame==2.0.0',
+            'pygame>=2.0.0',
             'requests==2.25.1',
             'sqlalchemy==1.3.22',
       ],
@@ -34,6 +34,6 @@ setup(name='photoviewer',
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
       ],
-      python_requires='>=3.6',
+      python_requires='>=3.7',
 
       )
