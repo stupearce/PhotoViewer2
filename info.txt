@@ -45,6 +45,8 @@ pip freeze > requirements.txt
 **************************************************************
 Option 2 PipEnv: a much better way
 **************************************************************
+https://pipenv.pypa.io/en/latest/basics/#example-pipenv-upgrade-workflow
+
 `Pipenv` behaves a bit like npm and sorts it all outdate
 it produces
 Pipfile and Pipfile.lock (rather like packages.json)
@@ -158,21 +160,33 @@ multipass info pragmatic-tapir
 log in to the instance:
 multipass shell pragmatic-tapir
 
-********************************************
+**************************************************************************
 Raspberry Pi (def user pi pass raspberry)
+**************************************************************************
+update the os:
+https://www.raspberrypi.org/documentation/raspbian/updating.md
 
+install remote desktop:
 sudo install xrdp (microsoft remote desktop )
 https://pimylifeup.com/raspberry-pi-remote-desktop/
 
-install snapd for snapcraft
+Install snapcraft:
+https://snapcraft.io/docs/installing-snap-on-raspbian
+install snapd
 sudo apt update (just updates the apt catalogue)
 sudo apt install snapd
 sudo reboot
 sudo snap install core
 
-https://snapcraft.io/docs/installing-snap-on-raspbian
-
+Pulling Photoviewer:
 snap login (developer account as the snaps are private)
 stuart@blu-oak
 pass samtd
 sudo snap install --edge photo-viewer
+
+
+notes
+SDL2 missing bits
+https://github.com/pygame/parrotjoy/issues/4
+pygame and numpy need some deps added via apt-get. 
+sudo apt-get install libsdl2-ttf-2.0-0 libsdl2-image-2.0-0 libsdl2-mixer-2.0-0 libatlas-base-dev

@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 
 setup(name='photoviewer',
-      version='0.1',
+      version='0.2',
       license='GPL 3.0',
       description='Picture viewer software based on pygame',
       long_description='''
