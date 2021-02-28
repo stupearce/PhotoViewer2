@@ -1,3 +1,4 @@
 TestPhotos
 app.log
 __pycache__
+*.snap
