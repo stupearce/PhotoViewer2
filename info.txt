@@ -76,6 +76,8 @@ pipenv update --outdated
 Package it up: to bulid manual distro
 https://packaging.python.org/tutorials/packaging-projects/
 
+https://realpython.com/python-wheels/
+
 https://docs.python-guide.org/shipping/freezing/#freezing-your-code-ref
 pyInstaller
 https://www.pyinstaller.org/
@@ -95,6 +97,9 @@ Developer side (publishing):
 ****************************************************************************************
 https://snapcraft.io/docs/snapcraft-overview
 https://snapcraft.io/blog/want-to-publish-a-snap-heres-a-list-of-dos-and-donts
+
+note there is a whole wheels site for ras pi with prebuilt wheels for all models, this needs to be a source in Pipfile otherwise the sources need to be built, which for Pygame is a major pain in the ass.
+https://www.piwheels.org/simple
 
 #1 First the python project must have a working setuptools build (setup.py) that works
 This is what would be used to package for PyPi distro. 
