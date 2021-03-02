@@ -18,7 +18,7 @@ setup(name='photoviewer',
       # py_modules=["six"],
 
       install_requires=[
-            'pillow==8.0.1',
+            'pillow>=8.0.1',
             'pygame>=2.0.0',
             'requests==2.25.1',
             'sqlalchemy==1.3.22',
