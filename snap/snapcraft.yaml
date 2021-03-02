@@ -65,7 +65,7 @@ parts:
 #       - libxss1 
 #       - libxtst6 
 #       - libxxf86vm1
-# apps:
+apps:
   photoviewer:
     command: bin/photoviewer
 
