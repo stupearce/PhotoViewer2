@@ -31,7 +31,40 @@ parts:
       - libsdl2-mixer-2.0-0 
       - libfreetype6  
       - libportmidi0
-
+      - libasyncns0 
+      - libflac8 
+      - libfluidsynth1 
+      - libice6 
+      - libjack0 
+      - libjbig0 
+      - libmodplug1 
+      - libmpg123-0 
+      - libogg0 
+      - libopus0 
+      - libopusfile0 
+      - libpulse0 
+      - libsm6 
+      - libsndfile1 
+      - libsndio7.0 
+      - libtiff5 
+      - libvorbis0a 
+      - libvorbisenc2 
+      - libvorbisfile3 
+      - libwayland-client0 
+      - libwayland-cursor0 
+      - libwayland-egl1 
+      - libwebp6 
+      - libx11-xcb1 
+      - libxcursor1 
+      - libxfixes3 
+      - libxi6 
+      - libxinerama1 
+      - libxkbcommon0 
+      - libxrandr2 
+      - libxrender1 
+      - libxss1 
+      - libxtst6 
+      - libxxf86vm1
 apps:
   photoviewer:
     command: bin/photoviewer
